@@ -76,3 +76,18 @@ python3 host.py UART_PORT uart-loopback
 交 `src/wiring.rs`、引脚表和实测记录。引脚表写清 SWCLK、SWDIO、UART TX 和 RX 的 MCU 引脚与接插件脚号。记录测试命令、结果和未测项目，并说明一项你用实测确认的配置。
 
 选做可用现成的 Classical CAN 与第二个节点交换帧，或继续尝试 CAN FD 和 Linux SocketCAN。
+
+## 扩展任务：CAN 与主机双向桥接（方向 1）
+
+本仓库在基础作业之上实现了方向 1：CAN 收到的标准数据帧会主动流式转发到 USB 控制口，主机也可以按行协议请求发送 CAN 帧。完整的数据路径、协议字段、队列容量和未上板验证说明见 [`EXTENSION.md`](EXTENSION.md)。
+
+控制口新增/变更的命令：
+
+```sh
+python3 host.py CONTROL_PORT can-monitor
+python3 host.py CONTROL_PORT can-send 123 AABB
+python3 host.py CONTROL_PORT stat
+python3 host.py CONTROL_PORT bridge-test
+```
+
+`PING`、`SWD ID` 和 UART 回环保持不变；旧的 `CAN TX <id> <data>` 仍可用，旧的 `CAN RX` 轮询由主动 `RX` 流取代。
