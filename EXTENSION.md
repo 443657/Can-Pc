@@ -128,9 +128,17 @@ cargo build --locked
 python3 -m py_compile host.py
 ```
 
+也可以直接运行仓库根目录的检查脚本；它会执行 `cargo build --locked`，把输出写入 `build.log`，并明确打印 `BUILD SUCCESS` 或 `BUILD FAILED`：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build-check.ps1
+```
+
+成功时退出码为 0，并检查 `target/thumbv7em-none-eabihf/debug/dm-mc02-cmsis-dap` 是否存在；失败时返回 cargo 的退出码。
+
 结果：
 
-- `cargo build --locked` 成功，完整输出见 [`build.log`](build.log)。
+- `build-check.ps1` 运行成功，输出 `BUILD SUCCESS`，退出码 0；完整输出见 [`build.log`](build.log)。
 - `python3 -m py_compile host.py` 退出码 0，无输出（语法检查通过）。
 
 硬件行为说明：以上只验证了编译和主机脚本语法。FDCAN 收发、USB 持续转发、队列满/断连行为均**尚未上板验证**；下面的测试步骤是预期行为，需在具备第二个 CAN 节点和 USB 主机的条件下执行。

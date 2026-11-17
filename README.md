@@ -56,6 +56,14 @@ cargo build --locked
 cargo run --locked
 ```
 
+只检查固件能否编译时，运行仓库根目录的脚本：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build-check.ps1
+```
+
+脚本执行 `cargo build --locked`，把完整输出写入 `build.log`，并打印 `BUILD SUCCESS` 或 `BUILD FAILED`；成功时退出码为 0。
+
 烧录结束后断电并拔掉外置探针。将选定的 SWCLK 和 SWDIO 接到目标板对应信号。可以用同一块 DM-MC02 的 P1 做自测。P1.3 是 SWCLK，P1.4 是 SWDIO。同板只接两根信号线。两板测试则接 SWCLK、SWDIO 和 GND，两板分别供电。按实物核对接插件方向，信号线接信号脚。
 
 通过 USB-C 重新连接电脑。运行主机测试脚本前，安装 Python 3 和 `pyserial`，并确认运行 `host.py` 的同一个 Python 环境能导入 `serial`。用 `python3 -m serial.tools.list_ports` 查看串口，用 `PING` 确认控制口。将下面的 `CONTROL_PORT` 和 `UART_PORT` 换成实际串口名。
